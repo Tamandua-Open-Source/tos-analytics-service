@@ -13,8 +13,7 @@ import {
   AddWorkIdleUserActionUseCase,
   AddWorkUserActionUseCase,
   GetAllUserActionsUseCase,
-  GetUserActionsByActionIdUseCase,
-  GetUserActionsByUserIdUseCase,
+  GetUserActionsUseCase,
 } from '../../../application/use-cases/analytics'
 
 class AnalyticsControllerComposer {
@@ -57,12 +56,7 @@ class AnalyticsControllerComposer {
     const getAllUserActionsUseCase = new GetAllUserActionsUseCase({
       analyticsRepository,
     })
-    const getUserActionsByActionIdUseCase = new GetUserActionsByActionIdUseCase(
-      {
-        analyticsRepository,
-      }
-    )
-    const getUserActionsByUserIdUseCase = new GetUserActionsByUserIdUseCase({
+    const getUserActionsUseCase = new GetUserActionsUseCase({
       analyticsRepository,
     })
 
@@ -79,8 +73,7 @@ class AnalyticsControllerComposer {
       addWorkIdleUserActionUseCase,
       addWorkUserActionUseCase,
       getAllUserActionsUseCase,
-      getUserActionsByActionIdUseCase,
-      getUserActionsByUserIdUseCase,
+      getUserActionsUseCase,
     })
   }
 }
