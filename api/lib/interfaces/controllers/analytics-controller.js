@@ -24,44 +24,16 @@ class AnalyticsController {
     }
   }
 
-  async getUserActionsByActionId(req) {
-    const { actionId } = req.params
+  async getUserActions(req) {
+    const { userId } = req.props
 
-    if (!actionId) {
-      return HttpResponse.badRequest('Provide actionId parameter')
-    }
-
-    try {
-      const { getUserActionsByActionIdUseCase } = this.useCases
-      const userActions = await getUserActionsByActionIdUseCase.execute(
-        actionId
-      )
-
-      if (!userActions) {
-        return HttpResponse.serverError()
-      } else {
-        return HttpResponse.ok({
-          message: 'User actions retrieved',
-          userActions,
-        })
-      }
-    } catch (error) {
-      console.error(error)
+    if (!userId) {
       return HttpResponse.serverError()
     }
-  }
-
-  async getUserActionsByUserId(req) {
-    const { userId } = req.params
-
-    console.log('\n\n\n\n\n\n' + userId + '\n\n\n\n\n\n')
-    if (!userId) {
-      return HttpResponse.badRequest('Provide userId parameter')
-    }
 
     try {
-      const { getUserActionsByUserIdUseCase } = this.useCases
-      const userActions = await getUserActionsByUserIdUseCase.execute(userId)
+      const { getUserActionsUseCase } = this.useCases
+      const userActions = await getUserActionsUseCase.execute(userId)
 
       if (!userActions) {
         return HttpResponse.serverError()

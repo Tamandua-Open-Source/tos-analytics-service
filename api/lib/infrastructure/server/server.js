@@ -7,20 +7,20 @@ import swaggerUI from 'swagger-ui-express'
 import swaggerDocument from './swagger.js'
 
 const app = express()
-const port = process.env.PORT || 8000
+const port = process.env.PORT || 8002
 
-app.use(logger('dev'))
+app.use(logger('common'))
 app.use(compression())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: false }))
 
-// app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
+app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 app.use('/api/analytics', AnalyticsRouter)
 
 app.get('/', (_req, res) =>
   res.status(200).send({
     status: 'Success',
-    message: 'Welcome! :)',
+    message: 'Analytics Service API',
   })
 )
 

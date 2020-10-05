@@ -5,11 +5,7 @@ class IAnalyticsRepository {
     throw new UnimplementedError()
   }
 
-  getUserActionsByUserId(_userId) {
-    throw new UnimplementedError()
-  }
-
-  getUserActionsByActionId(_actionId) {
+  getUserActions(_userId) {
     throw new UnimplementedError()
   }
 
