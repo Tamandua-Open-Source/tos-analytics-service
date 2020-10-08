@@ -14,25 +14,10 @@ class AnalyticsRepository extends IAnalyticsRepository {
     })
   }
 
-  async getUserActionsByUserId(userId) {
+  async getUserActions(userId) {
     return await db.UserAction.findAll({
       where: {
         UserId: userId,
-      },
-      attributes: ['UserId', 'createdAt'],
-      include: [
-        {
-          model: db.Action,
-          attributes: ['id', 'name'],
-        },
-      ],
-    })
-  }
-
-  async getUserActionsByActionId(actionId) {
-    return await db.UserAction.findAll({
-      where: {
-        ActionId: actionId,
       },
       attributes: ['UserId', 'createdAt'],
       include: [

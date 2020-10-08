@@ -2,18 +2,14 @@ export default {
   swagger: '2.0',
   info: {
     version: '1.0.0',
-    title: 'TOS data server',
+    title: 'Analytics Service API',
     description: 'Tamandua Open Source project',
   },
 
   tags: [
     {
-      name: 'User',
-      description: 'API for user data',
-    },
-    {
-      name: 'Stretch Sessions',
-      description: 'API for stretch session data',
+      name: 'Analytics',
+      description: 'API for analytics data',
     },
   ],
 
@@ -22,10 +18,10 @@ export default {
   produces: ['application/json'],
 
   paths: {
-    '/api/users': {
+    '/api/analytics/actions': {
       get: {
-        tags: ['User'],
-        summary: 'Show all users',
+        tags: ['Analytics'],
+        summary: 'Show user actions from all users',
         parameters: [
           {
             in: 'header',
@@ -39,17 +35,17 @@ export default {
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                users: {
+                userActions: {
                   type: 'array',
                   items: {
-                    $ref: '#/definitions/User',
+                    $ref: '#/definitions/User Action',
                   },
                 },
               },
@@ -58,11 +54,48 @@ export default {
         },
       },
     },
-    '/api/users/login': {
+
+    '/api/analytics/actions/me': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Show user actions',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Token used to authenticate the user',
+            required: false,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'OK',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
+    '/api/analytics/actions/breakIdle': {
       post: {
-        tags: ['User'],
-        summary:
-          'Authenticates the user and creates if there is no database record',
+        tags: ['Analytics'],
+        summary: 'Add breakIdle user action record',
         parameters: [
           {
             in: 'header',
@@ -73,34 +106,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                },
-                email: {
-                  type: 'string',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                user: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -108,10 +126,11 @@ export default {
         },
       },
     },
-    '/api/users/me': {
-      get: {
-        tags: ['User'],
-        summary: 'Shows the logged in user',
+
+    '/api/analytics/actions/break': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add break user action record',
         parameters: [
           {
             in: 'header',
@@ -125,94 +144,16 @@ export default {
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                user: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User',
-                },
-              },
-            },
-          },
-        },
-      },
-      delete: {
-        tags: ['User'],
-        summary: 'Delete the logged in user',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userId: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        },
-      },
-      put: {
-        tags: ['User'],
-        summary: 'updates the logged in user',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                name: {
-                  type: 'string',
-                },
-                email: {
-                  type: 'string',
-                },
-              },
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                user: {
-                  type: 'object',
-                  $ref: '#/definitions/User',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -220,10 +161,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences': {
-      get: {
-        tags: ['User'],
-        summary: 'Shows user preferences',
+
+    '/api/analytics/actions/finish': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add finish user action record',
         parameters: [
           {
             in: 'header',
@@ -237,16 +179,16 @@ export default {
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -254,10 +196,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/fcm': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates fcmToken in user preferences',
+
+    '/api/analytics/actions/inactive': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add inactive user action record',
         parameters: [
           {
             in: 'header',
@@ -268,31 +211,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                fcmToken: {
-                  type: 'string',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -300,10 +231,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/wwa': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates weekly work activity in user preferences',
+
+    '/api/analytics/actions/login': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add login user action record',
         parameters: [
           {
             in: 'header',
@@ -314,49 +246,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                monday: {
-                  type: 'boolean',
-                },
-                tuesday: {
-                  type: 'boolean',
-                },
-                wednesday: {
-                  type: 'boolean',
-                },
-                thursday: {
-                  type: 'boolean',
-                },
-                friday: {
-                  type: 'boolean',
-                },
-                saturday: {
-                  type: 'boolean',
-                },
-                sunday: {
-                  type: 'boolean',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -364,10 +266,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/wsa': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates weekly stretch activity in user preferences',
+
+    '/api/analytics/actions/pauseIdle': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add pauseIdle user action record',
         parameters: [
           {
             in: 'header',
@@ -378,52 +281,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                startTime: {
-                  type: 'string',
-                },
-                monday: {
-                  type: 'boolean',
-                },
-                tuesday: {
-                  type: 'boolean',
-                },
-                wednesday: {
-                  type: 'boolean',
-                },
-                thursday: {
-                  type: 'boolean',
-                },
-                friday: {
-                  type: 'boolean',
-                },
-                saturday: {
-                  type: 'boolean',
-                },
-                sunday: {
-                  type: 'boolean',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -431,10 +301,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/fst': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates to fixed start time in user preferences',
+
+    '/api/analytics/actions/pause': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add pause user action record',
         parameters: [
           {
             in: 'header',
@@ -445,31 +316,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                startTime: {
-                  type: 'string',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -477,10 +336,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/fsp': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates to fixed start period in user preferences',
+
+    '/api/analytics/actions/resume': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add resume user action record',
         parameters: [
           {
             in: 'header',
@@ -491,31 +351,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                startPeriodId: {
-                  type: 'integer',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -523,10 +371,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/wbd': {
-      patch: {
-        tags: ['User'],
-        summary: 'Update work duration and break duration in user preference',
+
+    '/api/analytics/actions/startCycle': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add startCycle user action record',
         parameters: [
           {
             in: 'header',
@@ -537,34 +386,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                workDuration: {
-                  type: 'integer',
-                },
-                breakDuration: {
-                  type: 'integer',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -572,10 +406,11 @@ export default {
         },
       },
     },
-    '/api/users/me/preferences/goal': {
-      patch: {
-        tags: ['User'],
-        summary: 'Updates goals in user preferences',
+
+    '/api/analytics/actions/workIdle': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add workIdle user action record',
         parameters: [
           {
             in: 'header',
@@ -586,37 +421,19 @@ export default {
               type: 'string',
             },
           },
-          {
-            in: 'body',
-            name: 'Info',
-            schema: {
-              type: 'object',
-              properties: {
-                criticalPain: {
-                  type: 'boolean',
-                },
-                painFromWork: {
-                  type: 'boolean',
-                },
-                futurePain: {
-                  type: 'boolean',
-                },
-              },
-            },
-          },
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                preferences: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Preferences',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -624,10 +441,11 @@ export default {
         },
       },
     },
-    '/api/stretchSessions': {
-      get: {
-        tags: ['Stretch Sessions'],
-        summary: 'Show all stretch sessions',
+
+    '/api/analytics/actions/work': {
+      post: {
+        tags: ['Analytics'],
+        summary: 'Add work user action record',
         parameters: [
           {
             in: 'header',
@@ -641,60 +459,16 @@ export default {
         ],
         produces: ['application/json'],
         responses: {
-          '200': {
+          200: {
             description: 'OK',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                stretchSessions: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/definitions/Stretch Session',
-                  },
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-    '/api/stretchSessions/{stretchSessionId}': {
-      get: {
-        tags: ['Stretch Sessions'],
-        summary: 'Show stretch session by id',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-          {
-            in: 'path',
-            name: 'stretchSessionId',
-            schema: {
-              type: 'integer',
-              minimum: 1,
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          '200': {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                stretchSession: {
+                userAction: {
                   type: 'object',
-                  $ref: '#/definitions/Stretch Session',
+                  $ref: '#/definitions/User Action',
                 },
               },
             },
@@ -705,171 +479,23 @@ export default {
   },
 
   definitions: {
-    User: {
+    'User Action': {
       type: 'object',
       properties: {
-        id: {
-          type: 'string',
-        },
-        name: {
-          type: 'string',
-        },
-        email: {
+        UserId: {
           type: 'string',
         },
         createdAt: {
           type: 'string',
         },
-        updatedAt: {
-          type: 'string',
+        userAction: {
+          type: 'object',
+          $ref: '#/definitions/Action',
         },
       },
     },
 
-    'User Preferences': {
-      type: 'object',
-      properties: {
-        fcmToken: {
-          type: 'string',
-        },
-        startTime: {
-          type: 'string',
-        },
-        breakDuration: {
-          type: 'integer',
-        },
-        breakLimitDuration: {
-          type: 'integer',
-        },
-        breakIdleLimitDuration: {
-          type: 'integer',
-        },
-        lastBreakStartTime: {
-          type: 'string',
-        },
-        workDuration: {
-          type: 'integer',
-        },
-        workLimitDuration: {
-          type: 'integer',
-        },
-        workIdleLimitDuration: {
-          type: 'integer',
-        },
-        lastWorkStartTime: {
-          type: 'string',
-        },
-        pauseLimitDuration: {
-          type: 'integer',
-        },
-        pauseIdleLimitDuration: {
-          type: 'integer',
-        },
-        lastPauseStartTime: {
-          type: 'string',
-        },
-        currentState: {
-          type: 'string',
-        },
-        lastState: {
-          type: 'string',
-        },
-        UserPreferenceWeeklyStretchActivity: {
-          type: 'object',
-          $ref: '#/definitions/Weekly Stretch Activity',
-        },
-        UserPreferenceWeeklyWorkActivity: {
-          type: 'object',
-          $ref: '#/definitions/Weekly Work Activity',
-        },
-        UserPreferenceGoal: {
-          type: 'object',
-          $ref: '#/definitions/Goal',
-        },
-        UserPreferenceTimeType: {
-          type: 'object',
-          $ref: '#/definitions/Time Type',
-        },
-        UserPreferenceStartPeriod: {
-          type: 'object',
-          $ref: '#/definitions/Start Period',
-        },
-      },
-    },
-
-    'Weekly Stretch Activity': {
-      type: 'object',
-      properties: {
-        startTime: {
-          type: 'string',
-        },
-        monday: {
-          type: 'boolean',
-        },
-        tuesday: {
-          type: 'boolean',
-        },
-        wednesday: {
-          type: 'boolean',
-        },
-        thursday: {
-          type: 'boolean',
-        },
-        friday: {
-          type: 'boolean',
-        },
-        saturday: {
-          type: 'boolean',
-        },
-        sunday: {
-          type: 'boolean',
-        },
-      },
-    },
-
-    'Weekly Work Activity': {
-      type: 'object',
-      properties: {
-        monday: {
-          type: 'boolean',
-        },
-        tuesday: {
-          type: 'boolean',
-        },
-        wednesday: {
-          type: 'boolean',
-        },
-        thursday: {
-          type: 'boolean',
-        },
-        friday: {
-          type: 'boolean',
-        },
-        saturday: {
-          type: 'boolean',
-        },
-        sunday: {
-          type: 'boolean',
-        },
-      },
-    },
-
-    Goal: {
-      type: 'object',
-      properties: {
-        criticalPain: {
-          type: 'boolean',
-        },
-        painFromWork: {
-          type: 'boolean',
-        },
-        futurePain: {
-          type: 'boolean',
-        },
-      },
-    },
-
-    'Time Type': {
+    Action: {
       type: 'object',
       properties: {
         id: {
@@ -877,93 +503,6 @@ export default {
         },
         name: {
           type: 'string',
-        },
-      },
-    },
-
-    'Start Period': {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'integer',
-        },
-        name: {
-          type: 'string',
-        },
-        startsAt: {
-          type: 'string',
-        },
-        endsAt: {
-          type: 'string',
-        },
-      },
-    },
-
-    'Body Part': {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'integer',
-        },
-        name: {
-          type: 'string',
-        },
-      },
-    },
-
-    'Stretch Movement': {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'integer',
-        },
-        name: {
-          type: 'string',
-        },
-        description: {
-          type: 'string',
-        },
-        duration: {
-          type: 'integer',
-        },
-        imageFileUrl: {
-          type: 'string',
-        },
-        videoFileUrl: {
-          type: 'string',
-        },
-        BodyParts: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/Body Part',
-          },
-        },
-      },
-    },
-
-    'Stretch Session': {
-      type: 'object',
-      properties: {
-        id: {
-          type: 'integer',
-        },
-        name: {
-          type: 'string',
-        },
-        description: {
-          type: 'string',
-        },
-        duration: {
-          type: 'integer',
-        },
-        imageFileUrl: {
-          type: 'integer',
-        },
-        StretchMovements: {
-          type: 'array',
-          items: {
-            $ref: '#/definitions/Stretch Movement',
-          },
         },
       },
     },

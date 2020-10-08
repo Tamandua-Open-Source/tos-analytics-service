@@ -10,8 +10,7 @@ import AddStartCycleUserActionUseCase from './add-start-cycle-user-action-use-ca
 import AddWorkIdleUserActionUseCase from './add-work-idle-user-action-use-case'
 import AddWorkUserActionUseCase from './add-work-user-action-use-case'
 import GetAllUserActionsUseCase from './get-all-user-actions-use-case'
-import GetUserActionsByActionIdUseCase from './get-user-actions-by-action-id-use-case'
-import GetUserActionsByUserIdUseCase from './get-user-actions-by-user-id-use-case'
+import GetUserActionsUseCase from './get-user-actions-use-case'
 
 export {
   AddBreakIdleUserActionUseCase,
@@ -26,6 +25,5 @@ export {
   AddWorkIdleUserActionUseCase,
   AddWorkUserActionUseCase,
   GetAllUserActionsUseCase,
-  GetUserActionsByActionIdUseCase,
-  GetUserActionsByUserIdUseCase,
+  GetUserActionsUseCase,
 }
