@@ -559,6 +559,9 @@ export default {
         endedAt: {
           type: 'string',
         },
+        onStartCycleCount: {
+          type: 'integer',
+        },
         onWorkCount: {
           type: 'integer',
         },
@@ -575,6 +578,15 @@ export default {
           type: 'integer',
         },
         onPauseIdleCount: {
+          type: 'integer',
+        },
+        onResumeCount: {
+          type: 'integer',
+        },
+        onFinishCount: {
+          type: 'integer',
+        },
+        onInactiveCount: {
           type: 'integer',
         },
         userActions: {
