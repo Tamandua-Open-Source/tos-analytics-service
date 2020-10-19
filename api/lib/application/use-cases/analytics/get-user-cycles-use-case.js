@@ -49,6 +49,7 @@ class GetUserCyclesUseCase {
     let onBreakIdleCount = 0
     let onPauseCount = 0
     let onPauseIdleCount = 0
+    let onResumeCount = 0
     let onFinishCount = 0
     let onInactiveCount = 0
 
@@ -60,6 +61,7 @@ class GetUserCyclesUseCase {
       if (cycle[i].Action.name === 'break idle') onBreakIdleCount += 1
       if (cycle[i].Action.name === 'pause') onPauseCount += 1
       if (cycle[i].Action.name === 'pause idle') onPauseIdleCount += 1
+      if (cycle[i].Action.name === 'resume') onResumeCount += 1
       if (cycle[i].Action.name === 'finish') onFinishCount += 1
       if (cycle[i].Action.name === 'inactive') onInactiveCount += 1
     }
@@ -74,6 +76,7 @@ class GetUserCyclesUseCase {
       onBreakIdleCount,
       onPauseCount,
       onPauseIdleCount,
+      onResumeCount,
       onFinishCount,
       onInactiveCount,
       userActions: cycle,
