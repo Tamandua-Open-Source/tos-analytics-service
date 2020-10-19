@@ -5,6 +5,41 @@ class AnalyticsController {
     this.useCases = useCases
   }
 
+  async getUserCycles(req) {
+    const { userId } = req.props
+    const { startDate, endDate } = req.query
+
+    if (!startDate) {
+      return HttpResponse.badRequest('startDate is bad formatted')
+    }
+
+    if (!endDate) {
+      return HttpResponse.badRequest('endDate is bad formatted')
+    }
+
+    try {
+      const { getUserCyclesUseCase } = this.useCases
+      const userCycles = await getUserCyclesUseCase.execute({
+        userId,
+        startDate,
+        endDate,
+      })
+      // const userCycles = []
+
+      if (!userCycles) {
+        return HttpResponse.serverError()
+      } else {
+        return HttpResponse.ok({
+          message: 'User cycles retrieved',
+          userCycles,
+        })
+      }
+    } catch (error) {
+      console.error(error)
+      return HttpResponse.serverError()
+    }
+  }
+
   async getAllUserActions(_req) {
     try {
       const { getAllUserActionsUseCase } = this.useCases
