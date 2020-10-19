@@ -23,6 +23,12 @@ router.get(
   ExpressRouterAdapter.adapt((req) => analyticsController.getUserActions(req))
 )
 
+router.get(
+  '/cycles/me',
+  ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
+  ExpressRouterAdapter.adapt((req) => analyticsController.getUserCycles(req))
+)
+
 router.post(
   '/actions/breakIdle',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),

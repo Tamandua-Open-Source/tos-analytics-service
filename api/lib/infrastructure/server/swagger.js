@@ -92,6 +92,61 @@ export default {
       },
     },
 
+    '/api/analytics/cycles/me': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Show user cycle actions between two dates',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Token used to authenticate the user',
+            required: false,
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'startDate',
+            description: 'Start Date, like: 2010-10-15T14:31:23.464Z',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'endDate',
+            description: 'End Date, like: 2025-10-15T14:31:23.464Z',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'OK',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userCycles: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Cycle',
+                  },
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+
     '/api/analytics/actions/breakIdle': {
       post: {
         tags: ['Analytics'],
@@ -488,9 +543,45 @@ export default {
         createdAt: {
           type: 'string',
         },
-        userAction: {
+        Action: {
           type: 'object',
           $ref: '#/definitions/Action',
+        },
+      },
+    },
+
+    'User Cycle': {
+      type: 'object',
+      properties: {
+        startedAt: {
+          type: 'string',
+        },
+        endedAt: {
+          type: 'string',
+        },
+        onWorkCount: {
+          type: 'integer',
+        },
+        onWorkIdleCount: {
+          type: 'integer',
+        },
+        onBreakCount: {
+          type: 'integer',
+        },
+        onBreakIdleCount: {
+          type: 'integer',
+        },
+        onPauseCount: {
+          type: 'integer',
+        },
+        onPauseIdleCount: {
+          type: 'integer',
+        },
+        userActions: {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/User Action',
+          },
         },
       },
     },

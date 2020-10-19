@@ -9,8 +9,10 @@ import AddResumeUserActionUseCase from './add-resume-user-action-use-case'
 import AddStartCycleUserActionUseCase from './add-start-cycle-user-action-use-case'
 import AddWorkIdleUserActionUseCase from './add-work-idle-user-action-use-case'
 import AddWorkUserActionUseCase from './add-work-user-action-use-case'
+
 import GetAllUserActionsUseCase from './get-all-user-actions-use-case'
 import GetUserActionsUseCase from './get-user-actions-use-case'
+import GetUserCyclesUseCase from './get-user-cycles-use-case'
 
 export {
   AddBreakIdleUserActionUseCase,
@@ -26,4 +28,5 @@ export {
   AddWorkUserActionUseCase,
   GetAllUserActionsUseCase,
   GetUserActionsUseCase,
+  GetUserCyclesUseCase,
 }
