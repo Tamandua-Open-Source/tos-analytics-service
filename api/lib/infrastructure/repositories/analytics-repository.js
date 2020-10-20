@@ -35,7 +35,8 @@ class AnalyticsRepository extends IAnalyticsRepository {
       where: {
         UserId: userId,
         createdAt: {
-          [Op.between]: [startDate, endDate],
+          [Op.lte]: endDate ?? new Date('40000-01-01Z00:00:00:000'),
+          [Op.gte]: startDate ?? new Date('1970-01-01Z00:00:00:000'),
         },
       },
       attributes: ['UserId', 'createdAt'],

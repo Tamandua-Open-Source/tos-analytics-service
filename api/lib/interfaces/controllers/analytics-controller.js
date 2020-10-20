@@ -9,14 +9,6 @@ class AnalyticsController {
     const { userId } = req.props
     const { startDate, endDate } = req.query
 
-    if (!startDate) {
-      return HttpResponse.badRequest('startDate is bad formatted')
-    }
-
-    if (!endDate) {
-      return HttpResponse.badRequest('endDate is bad formatted')
-    }
-
     try {
       const { getUserCyclesUseCase } = this.useCases
       const userCycles = await getUserCyclesUseCase.execute({
@@ -24,7 +16,6 @@ class AnalyticsController {
         startDate,
         endDate,
       })
-      // const userCycles = []
 
       if (!userCycles) {
         return HttpResponse.serverError()
