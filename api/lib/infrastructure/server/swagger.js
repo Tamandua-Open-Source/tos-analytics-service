@@ -95,7 +95,7 @@ export default {
     '/api/analytics/cycles/me': {
       get: {
         tags: ['Analytics'],
-        summary: 'Show user cycle actions between two dates',
+        summary: 'Show user cycle actions between two OPTIONAL dates',
         parameters: [
           {
             in: 'header',
@@ -109,8 +109,8 @@ export default {
           {
             in: 'query',
             name: 'startDate',
-            description: 'Start Date, like: 2010-10-15T14:31:23.464Z',
-            required: true,
+            description: 'OPTIONAL: Start Date (e.g: 2010-10-15T14:31:23.464Z)',
+            required: false,
             schema: {
               type: 'string',
             },
@@ -118,8 +118,8 @@ export default {
           {
             in: 'query',
             name: 'endDate',
-            description: 'End Date, like: 2025-10-15T14:31:23.464Z',
-            required: true,
+            description: 'OPTIONAL: End Date (e.g: 2025-10-15T14:31:23.464Z)',
+            required: false,
             schema: {
               type: 'string',
             },
@@ -550,6 +550,21 @@ export default {
       },
     },
 
+    'User State': {
+      type: 'object',
+      properties: {
+        startedAt: {
+          type: 'string',
+        },
+        endedAt: {
+          type: 'string',
+        },
+        state: {
+          type: 'string',
+        },
+      },
+    },
+
     'User Cycle': {
       type: 'object',
       properties: {
@@ -593,6 +608,12 @@ export default {
           type: 'array',
           items: {
             $ref: '#/definitions/User Action',
+          },
+        },
+        userStates: {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/User State',
           },
         },
       },
