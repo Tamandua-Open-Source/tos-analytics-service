@@ -53,17 +53,70 @@ class GetUserCyclesUseCase {
     let onFinishCount = 0
     let onInactiveCount = 0
 
+    let userStates = []
+    let currentUserState = {}
+
     for (const i in cycle) {
-      if (cycle[i].Action.name === 'start cycle') onStartCycleCount += 1
-      if (cycle[i].Action.name === 'work') onWorkCount += 1
-      if (cycle[i].Action.name === 'work idle') onWorkIdleCount += 1
-      if (cycle[i].Action.name === 'break') onBreakCount += 1
-      if (cycle[i].Action.name === 'break idle') onBreakIdleCount += 1
-      if (cycle[i].Action.name === 'pause') onPauseCount += 1
-      if (cycle[i].Action.name === 'pause idle') onPauseIdleCount += 1
-      if (cycle[i].Action.name === 'resume') onResumeCount += 1
-      if (cycle[i].Action.name === 'finish') onFinishCount += 1
-      if (cycle[i].Action.name === 'inactive') onInactiveCount += 1
+      if (i == cycle.length - 1) {
+        onFinishCount += 1
+        break
+      }
+
+      currentUserState.startedAt = cycle[i].createdAt
+      currentUserState.endedAt = cycle[parseInt(i) + 1].createdAt
+
+      switch (cycle[i].Action.name) {
+        case 'start cycle':
+          onStartCycleCount += 1
+          break
+        case 'work':
+          onWorkCount += 1
+          currentUserState.state = 'WORK'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'work idle':
+          onWorkIdleCount += 1
+          currentUserState.state = 'WORK IDLE'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'break':
+          onBreakCount += 1
+          currentUserState.state = 'BREAK'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'break idle':
+          onBreakIdleCount += 1
+          currentUserState.state = 'BREAK IDLE'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'pause':
+          onPauseCount += 1
+          currentUserState.state = 'PAUSE'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'pause idle':
+          onPauseIdleCount += 1
+          currentUserState.state = 'PAUSE IDLE'
+          userStates.push(currentUserState)
+          currentUserState = {}
+          break
+        case 'resume':
+          onResumeCount += 1
+          break
+        case 'finish':
+          onFinishCount += 1
+          break
+        case 'inactive':
+          onInactiveCount += 1
+          break
+        default:
+          break
+      }
     }
 
     return {
@@ -80,6 +133,7 @@ class GetUserCyclesUseCase {
       onFinishCount,
       onInactiveCount,
       userActions: cycle,
+      userStates,
     }
   }
 }
