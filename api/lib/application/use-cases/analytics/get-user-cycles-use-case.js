@@ -77,7 +77,7 @@ class GetUserCyclesUseCase {
           break
         case 'work idle':
           onWorkIdleCount += 1
-          currentUserState.state = 'WORK IDLE'
+          currentUserState.state = 'WORK_IDLE'
           userStates.push(currentUserState)
           currentUserState = {}
           break
@@ -89,7 +89,7 @@ class GetUserCyclesUseCase {
           break
         case 'break idle':
           onBreakIdleCount += 1
-          currentUserState.state = 'BREAK IDLE'
+          currentUserState.state = 'BREAK_IDLE'
           userStates.push(currentUserState)
           currentUserState = {}
           break
@@ -101,7 +101,7 @@ class GetUserCyclesUseCase {
           break
         case 'pause idle':
           onPauseIdleCount += 1
-          currentUserState.state = 'PAUSE IDLE'
+          currentUserState.state = 'PAUSE_IDLE'
           userStates.push(currentUserState)
           currentUserState = {}
           break
