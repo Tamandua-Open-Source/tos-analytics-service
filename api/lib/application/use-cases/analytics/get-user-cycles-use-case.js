@@ -12,8 +12,13 @@ class GetUserCyclesUseCase {
 
     let cycles = []
     let currentCycle = []
+    var started = false
 
     for (const i in userActions) {
+      if (userActions[i].Action.name === 'start cycle' && !started) {
+        started = true
+      }
+
       if (userActions[i].Action.name === 'start cycle') {
         if (currentCycle.length > 0) {
           cycles.push(this.mapToCycle(currentCycle))
