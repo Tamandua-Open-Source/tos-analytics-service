@@ -1,5 +1,6 @@
 import db from '../orm/models'
 import IAnalyticsRepository from '../../application/repository-interfaces/i-analytics-repository'
+import { Op } from 'sequelize'
 
 class AnalyticsRepository extends IAnalyticsRepository {
   async getAllUserActions() {
@@ -14,7 +15,7 @@ class AnalyticsRepository extends IAnalyticsRepository {
     })
   }
 
-  async getUserActionsByUserId(userId) {
+  async getUserActions(userId) {
     return await db.UserAction.findAll({
       where: {
         UserId: userId,
@@ -29,10 +30,14 @@ class AnalyticsRepository extends IAnalyticsRepository {
     })
   }
 
-  async getUserActionsByActionId(actionId) {
+  async getUserActionsBetween(userId, startDate, endDate) {
     return await db.UserAction.findAll({
       where: {
-        ActionId: actionId,
+        UserId: userId,
+        createdAt: {
+          [Op.lte]: endDate ?? new Date('40000-01-01Z00:00:00:000'),
+          [Op.gte]: startDate ?? new Date('1970-01-01Z00:00:00:000'),
+        },
       },
       attributes: ['UserId', 'createdAt'],
       include: [

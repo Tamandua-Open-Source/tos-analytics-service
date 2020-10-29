@@ -10,7 +10,7 @@ const authMiddleware = AuthMiddlewareComposer.compose()
 const router = Router()
 
 router.get(
-  '/',
+  '/actions',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.getAllUserActions(req)
@@ -18,23 +18,19 @@ router.get(
 )
 
 router.get(
-  '/:actionId',
+  '/actions/me',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
-  ExpressRouterAdapter.adapt((req) =>
-    analyticsController.getUserActionsByActionId(req)
-  )
+  ExpressRouterAdapter.adapt((req) => analyticsController.getUserActions(req))
 )
 
 router.get(
-  '/users/:userId',
+  '/cycles/me',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
-  ExpressRouterAdapter.adapt((req) =>
-    analyticsController.getUserActionsByUserId(req)
-  )
+  ExpressRouterAdapter.adapt((req) => analyticsController.getUserCycles(req))
 )
 
 router.post(
-  '/breakIdle',
+  '/actions/breakIdle',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addBreakIdleUserAction(req)
@@ -42,7 +38,7 @@ router.post(
 )
 
 router.post(
-  '/break',
+  '/actions/break',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addBreakUserAction(req)
@@ -50,7 +46,7 @@ router.post(
 )
 
 router.post(
-  '/finish',
+  '/actions/finish',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addFinishUserAction(req)
@@ -58,7 +54,7 @@ router.post(
 )
 
 router.post(
-  '/inactive',
+  '/actions/inactive',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addInactiveUserAction(req)
@@ -66,7 +62,7 @@ router.post(
 )
 
 router.post(
-  '/login',
+  '/actions/login',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addLoginUserAction(req)
@@ -74,7 +70,7 @@ router.post(
 )
 
 router.post(
-  '/pauseIdle',
+  '/actions/pauseIdle',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addPauseIdleUserAction(req)
@@ -82,7 +78,7 @@ router.post(
 )
 
 router.post(
-  '/pause',
+  '/actions/pause',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addPauseUserAction(req)
@@ -90,7 +86,7 @@ router.post(
 )
 
 router.post(
-  '/resume',
+  '/actions/resume',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addResumeUserAction(req)
@@ -98,7 +94,7 @@ router.post(
 )
 
 router.post(
-  '/startCycle',
+  '/actions/startCycle',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addStartCycleUserAction(req)
@@ -106,7 +102,7 @@ router.post(
 )
 
 router.post(
-  '/workIdle',
+  '/actions/workIdle',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addWorkIdleUserAction(req)
@@ -114,7 +110,7 @@ router.post(
 )
 
 router.post(
-  '/work',
+  '/actions/work',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.addWorkUserAction(req)
