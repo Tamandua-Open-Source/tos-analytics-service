@@ -1,5 +1,4 @@
-//LEGACY
-class GetUserCyclesUseCase {
+class GetUserTimerActionCyclesByUserIdUseCase {
   constructor({ userTimerActionRepository }) {
     this.userTimerActionRepository = userTimerActionRepository
   }
@@ -11,36 +10,25 @@ class GetUserCyclesUseCase {
       endDate
     )
 
-    const userActions = userTimerActions.map((userAction) => {
-      return {
-        UserId: userAction.UserId,
-        createdAt: userAction.createdAt,
-        Action: {
-          id: userAction.TimerAction.id,
-          name: userAction.TimerAction.name,
-        },
-      }
-    })
-
     let cycles = []
     let currentCycle = []
     var started = false
 
-    for (const i in userActions) {
-      if (userActions[i].Action.name === 'start cycle' && !started) {
+    for (const i in userTimerActions) {
+      if (userTimerActions[i].TimerAction.name === 'start cycle' && !started) {
         started = true
       }
 
-      if (userActions[i].Action.name === 'start cycle') {
+      if (userTimerActions[i].TimerAction.name === 'start cycle') {
         if (currentCycle.length > 0) {
           cycles.push(this.mapToCycle(currentCycle))
         }
         currentCycle = []
       }
 
-      currentCycle.push(userActions[i])
+      currentCycle.push(userTimerActions[i])
 
-      if (i == userActions.length - 1) {
+      if (i == userTimerActions.length - 1) {
         cycles.push(this.mapToCycle(currentCycle))
       }
     }
@@ -50,12 +38,12 @@ class GetUserCyclesUseCase {
 
   mapToCycle(cycle) {
     const startCycleAction = cycle.find(
-      (userAction) => userAction.Action.name === 'start cycle'
+      (userAction) => userAction.TimerAction.name === 'start cycle'
     )
     const startedAt = startCycleAction ? startCycleAction.createdAt : null
 
     const finishAction = cycle.find(
-      (userAction) => userAction.Action.name === 'finish'
+      (userAction) => userAction.TimerAction.name === 'finish'
     )
     const endedAt = finishAction ? finishAction.createdAt : null
 
@@ -82,7 +70,7 @@ class GetUserCyclesUseCase {
       currentUserState.startedAt = cycle[i].createdAt
       currentUserState.endedAt = cycle[parseInt(i) + 1].createdAt
 
-      switch (cycle[i].Action.name) {
+      switch (cycle[i].TimerAction.name) {
         case 'start cycle':
           onStartCycleCount += 1
           break
@@ -149,10 +137,10 @@ class GetUserCyclesUseCase {
       onResumeCount,
       onFinishCount,
       onInactiveCount,
-      userActions: cycle,
+      userTimerActions: cycle,
       userStates,
     }
   }
 }
 
-export default GetUserCyclesUseCase
+export default GetUserTimerActionCyclesByUserIdUseCase

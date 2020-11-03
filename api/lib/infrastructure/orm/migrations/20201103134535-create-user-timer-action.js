@@ -2,7 +2,7 @@
 
 module.exports = {
   up: async (queryInterface, Sequelize) => {
-    await queryInterface.createTable('UserActions', {
+    await queryInterface.createTable('UserTimerActions', {
       id: {
         type: Sequelize.INTEGER,
         allowNull: false,
@@ -13,7 +13,7 @@ module.exports = {
         type: Sequelize.STRING,
         allowNull: false,
       },
-      ActionId: {
+      TimerActionId: {
         type: Sequelize.INTEGER,
         allowNull: false,
       },
@@ -28,6 +28,6 @@ module.exports = {
     })
   },
   down: async (queryInterface, Sequelize) => {
-    await queryInterface.dropTable('UserActions')
+    await queryInterface.dropTable('UserTimerActions')
   },
 }
