@@ -8,6 +8,7 @@ import ErrorHandlerMiddleware from '../../interfaces/middlewares/error-handler-m
 
 import AnalyticsRouter from './routers/analytics-router'
 import UserTimerActionRouter from './routers/user-timer-action-router'
+import UserActionRouter from './routers/user-action-router'
 
 const app = express()
 const port = process.env.PORT || 8002
@@ -19,6 +20,7 @@ app.use(bodyParser.urlencoded({ extended: false }))
 app.use('/api-docs', swaggerUI.serve, swaggerUI.setup(swaggerDocument))
 app.use('/api', AnalyticsRouter)
 app.use('/api', UserTimerActionRouter)
+app.use('/api', UserActionRouter)
 app.use(ErrorHandlerMiddleware.log)
 app.use(ErrorHandlerMiddleware.handle)
 

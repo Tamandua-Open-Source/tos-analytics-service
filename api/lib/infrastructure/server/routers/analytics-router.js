@@ -16,6 +16,7 @@ router.get(
   ExpressRouterAdapter.adapt((req) => analyticsController.getUserCycles(req))
 )
 
+//user timer action
 router.get(
   '/users/me/timerActions',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
@@ -23,12 +24,27 @@ router.get(
     analyticsController.getUserTimerActionsByUserId(req)
   )
 )
-
 router.get(
   '/users/me/timerActions/cycles',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
   ExpressRouterAdapter.adapt((req) =>
     analyticsController.getUserTimerActionCyclesByUserId(req)
+  )
+)
+
+//user action
+router.get(
+  '/users/me/actions',
+  ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
+  ExpressRouterAdapter.adapt((req) =>
+    analyticsController.getUserActionsByUserId(req)
+  )
+)
+router.get(
+  '/actions/:actionId/userActions',
+  ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
+  ExpressRouterAdapter.adapt((req) =>
+    analyticsController.getUserActionsByActionIdBetween(req)
   )
 )
 

@@ -11,7 +11,7 @@ class UserTimerActionController {
     const { getAllTimerActionsUseCase } = this.useCases
     const timerActions = await getAllTimerActionsUseCase.execute()
 
-    if (!timerActions) return HttpResponse.noContent()
+    if (!timerActions) throw ServerError.internal()
 
     return HttpResponse.ok({
       message: 'Timer Actions Retrieved',
@@ -29,7 +29,7 @@ class UserTimerActionController {
       userId
     )
 
-    if (!userTimerActions) return HttpResponse.noContent()
+    if (!userTimerActions) throw ServerError.internal()
 
     return HttpResponse.ok({
       message: 'User Timer Actions Retrieved',

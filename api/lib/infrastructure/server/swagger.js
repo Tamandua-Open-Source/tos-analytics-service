@@ -14,6 +14,9 @@ export default {
     {
       name: 'User Timer Action',
     },
+    {
+      name: 'User Action',
+    },
   ],
 
   schemes: ['https', 'http'],
@@ -21,7 +24,7 @@ export default {
   produces: ['application/json'],
 
   paths: {
-    //analytics
+    //ANALYTICS - user timer action
     '/api/users/me/timerActions': {
       get: {
         tags: ['Analytics'],
@@ -124,7 +127,118 @@ export default {
         },
       },
     },
-    //LEGACY
+    //ANALYTICS - user action
+    '/api/users/me/actions': {
+      get: {
+        tags: ['Analytics'],
+        summary: 'Show User Actions',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Authentication Token Id',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'OK',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    '/api/actions/{actionId}/userActions': {
+      get: {
+        tags: ['Analytics'],
+        summary:
+          'Show User Actions By Action Id Between Start Date and End Date',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Authentication Token Id',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'actionId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'startDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2010-10-15T14:31:23.464Z',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'endDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2025-10-15T14:31:23.464Z',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'OK',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    //ANALYTICS - LEGACY
     '/api/analytics/cycles/me': {
       get: {
         tags: ['Analytics'],
@@ -173,6 +287,158 @@ export default {
                   },
                 },
               },
+            },
+          },
+        },
+      },
+    },
+
+    //user action
+    '/api/users/{userId}/actions': {
+      get: {
+        tags: ['User Action'],
+        summary: 'Get User Actions',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Analytics Service Api Key',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'Ok',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    '/api/actions': {
+      get: {
+        tags: ['User Action'],
+        summary: 'Get All Actions',
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'Ok',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                actions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    '/api/users/{userId}/actions/{actionId}': {
+      post: {
+        tags: ['User Action'],
+        summary: 'Add User Action',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Analytics Service Api Key',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'actionId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'body',
+            name: 'Info',
+            schema: {
+              type: 'object',
+              properties: {
+                latitude: {
+                  type: 'number',
+                },
+                longitude: {
+                  type: 'number',
+                },
+              },
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          201: {
+            description: 'Created',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userTimerAction: {
+                  type: 'object',
+                  $ref: '#/definitions/User Action',
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
@@ -362,7 +628,7 @@ export default {
         userActions: {
           type: 'array',
           items: {
-            $ref: '#/definitions/User Action',
+            $ref: '#/definitions/Legacy User Action',
           },
         },
         userStates: {
@@ -370,6 +636,22 @@ export default {
           items: {
             $ref: '#/definitions/User State',
           },
+        },
+      },
+    },
+
+    'Legacy User Action': {
+      type: 'object',
+      properties: {
+        UserId: {
+          type: 'string',
+        },
+        createdAt: {
+          type: 'string',
+        },
+        Action: {
+          type: 'object',
+          $ref: '#/definitions/Action',
         },
       },
     },
@@ -382,6 +664,12 @@ export default {
         },
         createdAt: {
           type: 'string',
+        },
+        latitude: {
+          type: 'number',
+        },
+        longitude: {
+          type: 'number',
         },
         Action: {
           type: 'object',
