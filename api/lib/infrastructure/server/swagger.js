@@ -31,7 +31,6 @@ export default {
             in: 'header',
             name: 'authorization',
             description: 'Authentication Token Id',
-            required: false,
             schema: {
               type: 'string',
             },
