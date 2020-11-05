@@ -11,6 +11,12 @@ export default {
       name: 'Analytics',
       description: 'API for analytics data',
     },
+    {
+      name: 'User Timer Action',
+    },
+    {
+      name: 'User Action',
+    },
   ],
 
   schemes: ['https', 'http'],
@@ -18,16 +24,16 @@ export default {
   produces: ['application/json'],
 
   paths: {
-    '/api/analytics/actions': {
+    //ANALYTICS - user timer action
+    '/api/users/me/timerActions': {
       get: {
         tags: ['Analytics'],
-        summary: 'Show user actions from all users',
+        summary: 'Show User Timer Actions',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Authentication Token Id',
             schema: {
               type: 'string',
             },
@@ -42,66 +48,34 @@ export default {
                 message: {
                   type: 'string',
                 },
-                userActions: {
+                userTimerActions: {
                   type: 'array',
                   items: {
-                    $ref: '#/definitions/User Action',
+                    $ref: '#/definitions/User Timer Action',
                   },
                 },
               },
             },
           },
-        },
-      },
-    },
-
-    '/api/analytics/actions/me': {
-      get: {
-        tags: ['Analytics'],
-        summary: 'Show user actions',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+          '4xx - 5xx': {
+            description: 'Error',
             schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userActions: {
-                  type: 'array',
-                  items: {
-                    $ref: '#/definitions/User Action',
-                  },
-                },
-              },
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
-
-    '/api/analytics/cycles/me': {
+    '/api/users/me/timerActions/cycles': {
       get: {
         tags: ['Analytics'],
-        summary: 'Show user cycle actions between two OPTIONAL dates',
+        summary: 'Show User Timer Action Cycles',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Authentication Token Id',
             schema: {
               type: 'string',
             },
@@ -109,8 +83,8 @@ export default {
           {
             in: 'query',
             name: 'startDate',
-            description: 'OPTIONAL: Start Date (e.g: 2010-10-15T14:31:23.464Z)',
-            required: false,
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2010-10-15T14:31:23.464Z',
             schema: {
               type: 'string',
             },
@@ -118,8 +92,8 @@ export default {
           {
             in: 'query',
             name: 'endDate',
-            description: 'OPTIONAL: End Date (e.g: 2025-10-15T14:31:23.464Z)',
-            required: false,
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2025-10-15T14:31:23.464Z',
             schema: {
               type: 'string',
             },
@@ -143,20 +117,26 @@ export default {
               },
             },
           },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
         },
       },
     },
-
-    '/api/analytics/actions/breakIdle': {
-      post: {
+    //ANALYTICS - user action
+    '/api/users/me/actions': {
+      get: {
         tags: ['Analytics'],
-        summary: 'Add breakIdle user action record',
+        summary: 'Show User Actions',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Authentication Token Id',
             schema: {
               type: 'string',
             },
@@ -171,27 +151,60 @@ export default {
                 message: {
                   type: 'string',
                 },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
                 },
               },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
-
-    '/api/analytics/actions/break': {
-      post: {
+    '/api/actions/{actionId}/userActions': {
+      get: {
         tags: ['Analytics'],
-        summary: 'Add break user action record',
+        summary:
+          'Show User Actions By Action Id Between Start Date and End Date',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Authentication Token Id',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'actionId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'startDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2010-10-15T14:31:23.464Z',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'endDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2025-10-15T14:31:23.464Z',
             schema: {
               type: 'string',
             },
@@ -206,27 +219,53 @@ export default {
                 message: {
                   type: 'string',
                 },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
                 },
               },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
-
-    '/api/analytics/actions/finish': {
-      post: {
+    //ANALYTICS - LEGACY
+    '/api/analytics/cycles/me': {
+      get: {
         tags: ['Analytics'],
-        summary: 'Add finish user action record',
+        summary: 'LEGACY - Please use `/api/users/me/timerActions/cycles`',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Authentication Token Id',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'startDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2010-10-15T14:31:23.464Z',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'query',
+            name: 'endDate',
+            description: 'yyyy-MM-ddTHH:mm:ss.SSSZ',
+            default: '2025-10-15T14:31:23.464Z',
             schema: {
               type: 'string',
             },
@@ -241,9 +280,11 @@ export default {
                 message: {
                   type: 'string',
                 },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
+                userCycles: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/Legacy User Cycle',
+                  },
                 },
               },
             },
@@ -252,16 +293,23 @@ export default {
       },
     },
 
-    '/api/analytics/actions/inactive': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add inactive user action record',
+    //user action
+    '/api/users/{userId}/actions': {
+      get: {
+        tags: ['User Action'],
+        summary: 'Get User Actions',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Analytics Service Api Key',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
             schema: {
               type: 'string',
             },
@@ -270,33 +318,152 @@ export default {
         produces: ['application/json'],
         responses: {
           200: {
-            description: 'OK',
+            description: 'Ok',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                userAction: {
+                userActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    '/api/actions': {
+      get: {
+        tags: ['User Action'],
+        summary: 'Get All Actions',
+        produces: ['application/json'],
+        responses: {
+          200: {
+            description: 'Ok',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                actions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/Action',
+                  },
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
+    '/api/users/{userId}/actions/{actionId}': {
+      post: {
+        tags: ['User Action'],
+        summary: 'Add User Action',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Analytics Service Api Key',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'actionId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'body',
+            name: 'Info',
+            schema: {
+              type: 'object',
+              properties: {
+                latitude: {
+                  type: 'number',
+                },
+                longitude: {
+                  type: 'number',
+                },
+              },
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          201: {
+            description: 'Created',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userTimerAction: {
                   type: 'object',
                   $ref: '#/definitions/User Action',
                 },
               },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
 
-    '/api/analytics/actions/login': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add login user action record',
+    //user timer action
+    '/api/users/{userId}/timerActions': {
+      get: {
+        tags: ['User Timer Action'],
+        summary: 'Get User Timer Actions',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Analytics Service Api Key',
+            required: true,
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
+            required: true,
             schema: {
               type: 'string',
             },
@@ -305,68 +472,86 @@ export default {
         produces: ['application/json'],
         responses: {
           200: {
-            description: 'OK',
+            description: 'Ok',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
+                userTimerActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/User Timer Action',
+                  },
                 },
               },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
-
-    '/api/analytics/actions/pauseIdle': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add pauseIdle user action record',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
+    '/api/timerActions': {
+      get: {
+        tags: ['User Timer Action'],
+        summary: 'Get All Timer Actions',
         produces: ['application/json'],
         responses: {
           200: {
-            description: 'OK',
+            description: 'Ok',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
+                timerActions: {
+                  type: 'array',
+                  items: {
+                    $ref: '#/definitions/Timer Action',
+                  },
                 },
               },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
       },
     },
-
-    '/api/analytics/actions/pause': {
+    '/api/users/{userId}/timerActions/{timerActionId}': {
       post: {
-        tags: ['Analytics'],
-        summary: 'Add pause user action record',
+        tags: ['User Timer Action'],
+        summary: 'Add User Timer Action',
         parameters: [
           {
             in: 'header',
             name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+            description: 'Analytics Service Api Key',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'userId',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'timerActionId',
             schema: {
               type: 'string',
             },
@@ -374,158 +559,25 @@ export default {
         ],
         produces: ['application/json'],
         responses: {
-          200: {
-            description: 'OK',
+          201: {
+            description: 'Created',
             schema: {
               properties: {
                 message: {
                   type: 'string',
                 },
-                userAction: {
+                userTimerAction: {
                   type: 'object',
-                  $ref: '#/definitions/User Action',
+                  $ref: '#/definitions/User Timer Action',
                 },
               },
             },
           },
-        },
-      },
-    },
-
-    '/api/analytics/actions/resume': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add resume user action record',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
+          '4xx - 5xx': {
+            description: 'Error',
             schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-
-    '/api/analytics/actions/startCycle': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add startCycle user action record',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-
-    '/api/analytics/actions/workIdle': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add workIdle user action record',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
-                },
-              },
-            },
-          },
-        },
-      },
-    },
-
-    '/api/analytics/actions/work': {
-      post: {
-        tags: ['Analytics'],
-        summary: 'Add work user action record',
-        parameters: [
-          {
-            in: 'header',
-            name: 'authorization',
-            description: 'Token used to authenticate the user',
-            required: false,
-            schema: {
-              type: 'string',
-            },
-          },
-        ],
-        produces: ['application/json'],
-        responses: {
-          200: {
-            description: 'OK',
-            schema: {
-              properties: {
-                message: {
-                  type: 'string',
-                },
-                userAction: {
-                  type: 'object',
-                  $ref: '#/definitions/User Action',
-                },
-              },
+              type: 'object',
+              $ref: '#/definitions/Error',
             },
           },
         },
@@ -534,7 +586,61 @@ export default {
   },
 
   definitions: {
-    'User Action': {
+    'Legacy User Cycle': {
+      type: 'object',
+      properties: {
+        startedAt: {
+          type: 'string',
+        },
+        endedAt: {
+          type: 'string',
+        },
+        onStartCycleCount: {
+          type: 'integer',
+        },
+        onWorkCount: {
+          type: 'integer',
+        },
+        onWorkIdleCount: {
+          type: 'integer',
+        },
+        onBreakCount: {
+          type: 'integer',
+        },
+        onBreakIdleCount: {
+          type: 'integer',
+        },
+        onPauseCount: {
+          type: 'integer',
+        },
+        onPauseIdleCount: {
+          type: 'integer',
+        },
+        onResumeCount: {
+          type: 'integer',
+        },
+        onFinishCount: {
+          type: 'integer',
+        },
+        onInactiveCount: {
+          type: 'integer',
+        },
+        userActions: {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/Legacy User Action',
+          },
+        },
+        userStates: {
+          type: 'array',
+          items: {
+            $ref: '#/definitions/User State',
+          },
+        },
+      },
+    },
+
+    'Legacy User Action': {
       type: 'object',
       properties: {
         UserId: {
@@ -550,16 +656,35 @@ export default {
       },
     },
 
-    'User State': {
+    'User Action': {
       type: 'object',
       properties: {
-        startedAt: {
+        UserId: {
           type: 'string',
         },
-        endedAt: {
+        createdAt: {
           type: 'string',
         },
-        state: {
+        latitude: {
+          type: 'number',
+        },
+        longitude: {
+          type: 'number',
+        },
+        Action: {
+          type: 'object',
+          $ref: '#/definitions/Action',
+        },
+      },
+    },
+
+    Action: {
+      type: 'object',
+      properties: {
+        id: {
+          type: 'integer',
+        },
+        name: {
           type: 'string',
         },
       },
@@ -604,10 +729,10 @@ export default {
         onInactiveCount: {
           type: 'integer',
         },
-        userActions: {
+        userTimerActions: {
           type: 'array',
           items: {
-            $ref: '#/definitions/User Action',
+            $ref: '#/definitions/User Timer Action',
           },
         },
         userStates: {
@@ -619,13 +744,68 @@ export default {
       },
     },
 
-    Action: {
+    'User Timer Action': {
+      type: 'object',
+      properties: {
+        UserId: {
+          type: 'string',
+        },
+        createdAt: {
+          type: 'string',
+        },
+        TimerAction: {
+          type: 'object',
+          $ref: '#/definitions/Timer Action',
+        },
+      },
+    },
+
+    'Timer Action': {
       type: 'object',
       properties: {
         id: {
           type: 'integer',
         },
         name: {
+          type: 'string',
+        },
+      },
+    },
+
+    'User State': {
+      type: 'object',
+      properties: {
+        startedAt: {
+          type: 'string',
+        },
+        endedAt: {
+          type: 'string',
+        },
+        state: {
+          type: 'string',
+        },
+      },
+    },
+
+    Error: {
+      type: 'object',
+      properties: {
+        errorCode: {
+          type: 'string',
+        },
+        message: {
+          type: 'string',
+        },
+        errors: {
+          type: 'array',
+          items: {
+            type: 'string',
+          },
+        },
+        method: {
+          type: 'string',
+        },
+        url: {
           type: 'string',
         },
       },
