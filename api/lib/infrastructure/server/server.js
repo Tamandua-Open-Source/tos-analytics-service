@@ -13,6 +13,8 @@ import UserActionRouter from './routers/user-action-router'
 const app = express()
 const port = process.env.PORT || 8002
 
+app.set('trust proxy', true)
+
 app.use(logger('common'))
 app.use(compression())
 app.use(bodyParser.json())
