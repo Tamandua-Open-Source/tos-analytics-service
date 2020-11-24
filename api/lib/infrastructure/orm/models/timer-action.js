@@ -3,12 +3,12 @@
 const { Model } = require('sequelize')
 
 module.exports = (sequelize, DataTypes) => {
-  class UserAction extends Model {
+  class TimerAction extends Model {
     static associate(models) {
-      UserAction.belongsTo(models.Action)
+      TimerAction.hasOne(models.UserTimerAction)
     }
   }
-  UserAction.init(
+  TimerAction.init(
     {
       id: {
         type: DataTypes.INTEGER,
@@ -16,21 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         autoIncrement: true,
         primaryKey: true,
       },
-      UserId: {
+      name: {
         type: DataTypes.STRING,
         allowNull: false,
-      },
-      ActionId: {
-        type: DataTypes.INTEGER,
-        allowNull: false,
-      },
-      latitude: {
-        type: DataTypes.DOUBLE,
-        allowNull: true,
-      },
-      longitude: {
-        type: DataTypes.DOUBLE,
-        allowNull: true,
       },
       createdAt: {
         type: DataTypes.DATE,
@@ -43,8 +31,8 @@ module.exports = (sequelize, DataTypes) => {
     },
     {
       sequelize,
-      modelName: 'UserAction',
+      modelName: 'TimerAction',
     }
   )
-  return UserAction
+  return TimerAction
 }
