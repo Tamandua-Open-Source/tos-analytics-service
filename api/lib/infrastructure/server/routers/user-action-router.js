@@ -23,6 +23,14 @@ router.get(
 )
 
 router.post(
+  '/users/me/actions/:actionId',
+  ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyToken(req)),
+  ExpressRouterAdapter.adapt((req) =>
+    userActionController.addUserTimerActionByActionId(req)
+  )
+)
+
+router.post(
   '/users/:userId/actions/:actionId',
   ExpressMiddlewareAdapter.adapt((req) => authMiddleware.verifyApiKey(req)),
   ExpressRouterAdapter.adapt((req) =>
