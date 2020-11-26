@@ -444,6 +444,53 @@ export default {
         },
       },
     },
+    '/api/users/me/actions/{actionId}': {
+      post: {
+        tags: ['User Action'],
+        summary: 'Add User Action',
+        parameters: [
+          {
+            in: 'header',
+            name: 'authorization',
+            description: 'Authentication Token Id',
+            schema: {
+              type: 'string',
+            },
+          },
+          {
+            in: 'path',
+            name: 'actionId',
+            schema: {
+              type: 'string',
+            },
+          },
+        ],
+        produces: ['application/json'],
+        responses: {
+          201: {
+            description: 'Created',
+            schema: {
+              properties: {
+                message: {
+                  type: 'string',
+                },
+                userTimerAction: {
+                  type: 'object',
+                  $ref: '#/definitions/User Action',
+                },
+              },
+            },
+          },
+          '4xx - 5xx': {
+            description: 'Error',
+            schema: {
+              type: 'object',
+              $ref: '#/definitions/Error',
+            },
+          },
+        },
+      },
+    },
 
     //user timer action
     '/api/users/{userId}/timerActions': {

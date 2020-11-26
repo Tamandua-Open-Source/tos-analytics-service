@@ -58,6 +58,29 @@ class UserActionController {
       userAction,
     })
   }
+
+  async addUserTimerActionByActionId(req) {
+    const { userId } = req.props
+    const { actionId } = req.params
+
+    if (!actionId)
+      throw ClientError.badRequest("Missing 'actionId' Path Parameter")
+
+    const { addUserActionUseCase } = this.useCases
+    const userAction = await addUserActionUseCase.execute(
+      userId,
+      actionId,
+      null,
+      null
+    )
+
+    if (!userAction) return HttpResponse.noContent()
+
+    return HttpResponse.created({
+      message: 'User Action Created',
+      userAction,
+    })
+  }
 }
 
 export default UserActionController
